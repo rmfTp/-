@@ -2,6 +2,7 @@ package com.example.demo.member.entities;
 
 import com.example.demo.global.entities.BaseEntity;
 import com.example.demo.member.authorities.Authority;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class Member extends BaseEntity implements Serializable {
     @Column(length=75, unique = true, nullable = false)
     private String email;
 
+    @JsonIgnore
     @Column(length=65)
     private String password;
 

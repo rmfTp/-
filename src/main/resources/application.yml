@@ -69,10 +69,10 @@ springdoc:
     doc-expansion: none
   paths-to-match:
     - /api/**
-  member:
-    jwt:
-      secret: ${jwt.secret}
-      validTime: ${jwt.validTime}
+member:
+  jwt:
+    secret: ${jwt.secret}
+    validTime: ${jwt.validTime}
 
 # 소셜 로그인 API 설정
 social:
