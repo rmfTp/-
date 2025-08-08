@@ -10,6 +10,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
@@ -85,6 +87,25 @@ public class TokenService {
         return authentication;
     }
 
+    /**
+     * 요청헤더
+     * Authorization: Brarer JWT 토큰
+     * @param request
+     * @return
+     */
+    public Authentication authenticate(ServletRequest request) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        String token = req.getHeader("Authorization");
+        if (!StringUtils.hasText(token)) return null;
+        token = token.substring(7);
+        if (!StringUtils.hasText(token)) return null;
+        return authenticate(token);
+    }
+
+    /**
+     * 토큰 유효성 검사
+     * @param token
+     */
     public void validate(String token) {
         String errorCode = null;
         Exception error = null;
