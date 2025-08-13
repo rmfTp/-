@@ -1,8 +1,10 @@
 package com.example.demo.member.validators;
 
 import com.example.demo.member.controllers.RequestToken;
+import com.example.demo.member.entities.Member;
 import com.example.demo.member.repositories.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -11,6 +13,7 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class TokenValidator implements Validator {
     private final MemberRepository repository;
+    private final PasswordEncoder encoder;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -23,7 +26,12 @@ public class TokenValidator implements Validator {
         if (errors.hasErrors())return;
 
         RequestToken form = (RequestToken) target;
-        if (!repository.existsByEmail(form.getEmail()))
-            errors.rejectValue("email","NotFound.member");
+        Member member = repository.findByEmail(form.getEmail()).orElse(null);
+
+        if (member == null)
+            errors.reject("NotFound.member.or.password");
+        if (member != null && !encoder.matches(form.getPassword(), member.getPassword()))
+            errors.reject("NotFound.member.or.password");
+
     }
 }

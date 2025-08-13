@@ -54,7 +54,7 @@ public class MemberController {
     @ApiResponse(responseCode = "200", description = "인증 성공시 토큰(JWT)발급")
     @PostMapping("/token")
     public String token(@Valid @RequestBody RequestToken form, Errors errors) {
-        tokenValidator.validate(form,errors);
+        tokenValidator.validate(form, errors);
         if (errors.hasErrors())
             throw new BadRequestException(utils.getErrorMessages(errors));
         return tokenService.create(form.getEmail());
